@@ -1,5 +1,6 @@
 package com.loicortola.training.archiveaggregator.webapp;
 
+import com.loicortola.training.archiveaggregator.webapp.filter.ApiKeyInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +12,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import java.util.ArrayList;
@@ -79,10 +81,21 @@ public class ArchiveAggregatorWebConfig extends WebMvcConfigurerAdapter {
     converters.add(new ByteArrayHttpMessageConverter());
     converters.add(jackson2HttpMessageConverter);
   }
-  
-  // step1: create com.loicortola.training.archiveaggregator.common.dao.ApiKeyDAO and use apikey1
-  // step2: create com.loicortola.training.archiveaggregator.core.dao.impl.MemoryApiKeyDAOImpl and use apikey2
-  // step3: create com.loicortola.training.archiveaggregator.webapp.filter.ApiKeyInterceptor and use apikey3
-  // step8: apikey7 here to reference interceptor
-  
+
+  /**
+   * Bean.
+   * Declare ApiKeyInterceptor
+   *
+   * @return the ApiKeyInterceptor singleton
+   */
+  @Bean
+  public ApiKeyInterceptor apiKeyInterceptor() {
+    return new ApiKeyInterceptor();
+  }
+
+  @Override
+  public void addInterceptors(InterceptorRegistry registry) {
+    registry.addInterceptor(apiKeyInterceptor());
+  }
+
 }

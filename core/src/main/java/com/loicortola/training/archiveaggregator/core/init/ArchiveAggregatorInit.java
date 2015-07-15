@@ -1,5 +1,6 @@
 package com.loicortola.training.archiveaggregator.core.init;
 
+import com.loicortola.training.archiveaggregator.common.dao.ApiKeyDAO;
 import com.loicortola.training.archiveaggregator.common.service.ContextService;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
@@ -26,6 +27,9 @@ public class ArchiveAggregatorInit {
   @Autowired
   ContextService contextService;
 
+  @Autowired
+  ApiKeyDAO apiKeyDAO;
+
   @Value("${environment}")
   String environment;
 
@@ -44,14 +48,24 @@ public class ArchiveAggregatorInit {
       LOGGER.info("-* Clear temporary data");
       clearDirectories();
     }
-    // step9: use apikey8 (replace class) init default entries for ApiKeyDAO
+    LOGGER.info("-* Init apiKey entries");
+    initApiKeyEntries();
     LOGGER.info("----Archive Aggregator Init Success----");
+  }
+
+  /**
+   * Init all ApiKey entries.
+   * TODO: should be externalized into static files
+   */
+  private void initApiKeyEntries() {
+    apiKeyDAO.save("default");
+    apiKeyDAO.save("e20ae86622bcb64237ae04c250c9d191cbb6dc30");
   }
 
   /**
    * Check whether the environment property has a valid value or not.
    *
-   * @throws java.lang.IllegalArgumentException if the value is invalid.
+   * @throws IllegalArgumentException if the value is invalid.
    */
   private void assertValidEnvironment() {
     environment = environment.trim().toUpperCase();

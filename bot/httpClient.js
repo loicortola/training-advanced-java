@@ -7,14 +7,20 @@ var basePath = '/api';
 function InitOptions() {
   return {
     url: 'http://' + host + basePath + '/init',
-    headers: {'accept': 'application/json'}
+    headers: {
+      'accept': 'application/json',
+      'Api-Key': 'default'
+    }
   }
 };
 
 function ProcessOptions(uuid) {
   return {
     url: 'http://' + host + basePath + '/process/' + uuid,
-    headers: {'accept': 'application/json'},
+    headers: {
+      'accept': 'application/json',
+      'Api-Key': 'default'
+    },
     method: 'POST'
   }
 };
@@ -22,7 +28,10 @@ function ProcessOptions(uuid) {
 function ProgressOptions(uuid) {
   return {
     url: 'http://' + host + basePath + '/process/state/' + uuid,
-    headers: {'accept': 'application/json'}
+    headers: {
+      'accept': 'application/json',
+      'Api-Key': 'default'
+    }
   }
 };
 
@@ -31,8 +40,9 @@ function UploadOptions(uuid, data) {
     url: 'http://' + host + basePath + '/file/' + uuid,
     method: 'POST',
     headers: {
-      'content-type': 'multipart/form-data',    
-      'accept': 'application/json'
+      'content-type': 'multipart/form-data',
+      'accept': 'application/json',
+      'Api-Key': 'default'
     },
     formData: data
   }
@@ -57,7 +67,7 @@ var upload = function (uuid, file) {
     var form = {
       "files[]": fs.createReadStream(file)
     };
-    
+
     request(new UploadOptions(uuid, form), function(error, response, body) {
       if (response.statusCode == 200) {
         var result = JSON.parse(body);
@@ -66,11 +76,11 @@ var upload = function (uuid, file) {
       } else {
         reject(error);
       }
-      
+
     })
-    
+
   })
-  
+
 }
 
 var process = function (uuid) {
