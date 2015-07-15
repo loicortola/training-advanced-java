@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.loicortola.training</groupId>
+        <artifactId>archive-aggregator-parent</artifactId>
+        <version>0.1.0-SNAPSHOT</version>
+    </parent>
+  
+    <artifactId>archive-aggregator-core</artifactId>
+
+  <name>Advanced Java Archive Aggregator Core</name>
+  <description>
+    Core Archive Aggregator classes.
+  </description>
+  <url>https://github.com/loicortola/training-advanced-java</url>
+
+  <dependencies>
+    <!-- Common classes -->
+    <dependency>
+      <groupId>com.loicortola.training</groupId>
+      <artifactId>archive-aggregator-common</artifactId>
+    </dependency>
+    <!-- SpringMVC / Jackson -->
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-core</artifactId>
+    </dependency>
+
+    <!-- Spring -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-web</artifactId>
+    </dependency>
+    
+    <!-- Spring boot -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-autoconfigure</artifactId>
+    </dependency>
+
+    <!-- Commons fileupload -->
+    <dependency>
+      <groupId>commons-fileupload</groupId>
+      <artifactId>commons-fileupload</artifactId>
+    </dependency>
+
+    <!-- Utils -->
+    <dependency>
+      <groupId>com.joanzapata.utils</groupId>
+      <artifactId>string-format</artifactId>
+    </dependency>
+  </dependencies>
+    
+</project>

@@ -76,3 +76,12 @@ shared.loader=$AA_SETUP_DIR/conf
 Make a copy of **archive-aggregator-webapp.properties** (in training-advanced-java/src/main/resources) to **env-**archive-aggregator-webapp.properties in $AA_SETUP_DIR/conf.  
 * Override all "override with env-designmyapp-engine.properties" fields.  
 Make a copy of logback.xml (in training-advanced-java/conf) to $AA_SETUP_DIR/conf.
+
+### 6. Testing
+
+A nodejs based bot has been created to facilitate the app testing.  
+Install node, then browse to training-advanced-java/bot folder.  
+
+ * Create a directory named **archives**  
+ * Insert 12 dummy zip files named fileX.zip (where X is 1 to 12)  
+ * Test with the following command: **node client**

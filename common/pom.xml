@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <!-- Project descriptor -->
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.loicortola.training</groupId>
+    <artifactId>archive-aggregator-parent</artifactId>
+    <version>0.1.0-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>archive-aggregator-common</artifactId>
+  
+  <name>Advanced Java Archive Aggregator Common</name>
+  <description>
+    Common classes required by the Archive Aggregator modules.
+  </description>
+  <url>https://github.com/loicortola/training-advanced-java</url>
+
+  <dependencies>
+
+    <!-- Jackson -->
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+    </dependency>
+    <!-- Spring -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context</artifactId>
+    </dependency>
+
+  </dependencies>
+
+</project>
