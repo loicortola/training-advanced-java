@@ -79,5 +79,10 @@ public class ArchiveAggregatorWebConfig extends WebMvcConfigurerAdapter {
     converters.add(new ByteArrayHttpMessageConverter());
     converters.add(jackson2HttpMessageConverter);
   }
-
+  
+  // step1: create com.loicortola.training.archiveaggregator.common.dao.ApiKeyDAO and use apikey1
+  // step2: create com.loicortola.training.archiveaggregator.core.dao.impl.MemoryApiKeyDAOImpl and use apikey2
+  // step3: create com.loicortola.training.archiveaggregator.webapp.filter.ApiKeyInterceptor and use apikey3
+  // step8: apikey7 here to reference interceptor
+  
 }

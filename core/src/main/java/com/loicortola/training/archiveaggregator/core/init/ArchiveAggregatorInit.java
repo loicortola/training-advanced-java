@@ -44,6 +44,7 @@ public class ArchiveAggregatorInit {
       LOGGER.info("-* Clear temporary data");
       clearDirectories();
     }
+    // step9: use apikey8 (replace class) init default entries for ApiKeyDAO
     LOGGER.info("----Archive Aggregator Init Success----");
   }
 
