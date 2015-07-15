@@ -11,6 +11,7 @@ import java.io.InputStream;
  */
 public interface ArchiveService {
 
+  // step1: refactor process -> processAsync and change synchronously -> asynchronously
   /**
    * Process an archive synchronously.
    *

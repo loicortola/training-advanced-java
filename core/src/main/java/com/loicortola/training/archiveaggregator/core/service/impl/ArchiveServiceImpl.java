@@ -105,10 +105,12 @@ public class ArchiveServiceImpl implements ArchiveService {
   public void process(final Archive archive) {
     long startTime = System.nanoTime();
     LOGGER.debug("In process");
+    
     // Add building keys
     synchronized (currentlyBuildingKeys) {
       currentlyBuildingKeys.add(archive.getUuid());
     }
+    
     // Update build attempts count in DB
     archive.incBuildAttempts();
     archive.setBuilt(false);
@@ -119,13 +121,19 @@ public class ArchiveServiceImpl implements ArchiveService {
     createArchiveDirectory(archiveUuid);
 
     int archiveCount = archive.getFiles().size();
-
+    
+    // step2: async1 here: Add CompletableFutures array
+    
     try {
       for (int i = 0; i < archiveCount; i++) {
         String fileName = archive.getFiles().get(i);
         File f = getFile(archiveUuid, fileName);
+        // step3: async2 here: instead of synchronous extract, do asynchronous (replace line below)
         extract(archiveUuid, f);
       }
+      
+      // step4: move try (before loop) here
+      // step5: async3 here: wrap all following block
       long delta = System.nanoTime() - startTime;
       LOGGER.debug("Extraction Took: " + delta / 1000000 + " milliseconds");
       createArchive(archiveUuid);
@@ -143,6 +151,7 @@ public class ArchiveServiceImpl implements ArchiveService {
         currentlyBuildingKeys.remove(archive.getUuid());
       }
     }
+    // step6: async4 here: after async3 block, need to handle exceptions.
   }
 
   @Override
