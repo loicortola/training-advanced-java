@@ -63,9 +63,18 @@
     <filter-name>encodingFilter</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
-  
-  <!-- step1: create com.loicortola.training.archiveaggregator.filter.CorsFilter class -->
-  <!-- step2: cors1 : as code replacement for class -->
-  <!-- step3: cors2 here: declare filter in web.xml -->
+
+  <!-- 
+      CORS filter for DispatcherServlet
+      DelegatingFilterProxy will look for bean named the same as the value in filter-name
+    -->
+  <filter>
+    <filter-name>corsFilter</filter-name>
+    <filter-class>com.loicortola.training.archiveaggregator.webapp.filter.CorsFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>corsFilter</filter-name>
+    <servlet-name>spring</servlet-name>
+  </filter-mapping>
   
 </web-app>
