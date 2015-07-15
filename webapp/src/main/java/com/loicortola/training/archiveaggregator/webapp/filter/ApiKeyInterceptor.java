@@ -26,6 +26,8 @@ public class ApiKeyInterceptor implements HandlerInterceptor {
 
   @Autowired
   ApiKeyDAO apiKeyDAO;
+  
+  // step3: add ContextService, set value
 
   @Override
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {

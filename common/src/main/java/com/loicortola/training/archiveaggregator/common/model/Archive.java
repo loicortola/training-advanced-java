@@ -24,6 +24,8 @@ public class Archive {
   private int buildAttempts;
 
   private boolean built;
+  
+  // step1: add originApiKey String attribute to the model class
 
   /**
    * Default constructor.
