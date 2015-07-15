@@ -25,7 +25,7 @@ public class Archive {
 
   private boolean built;
   
-  // step1: add originApiKey String attribute to the model class
+  private String originApiKey;
 
   /**
    * Default constructor.
@@ -63,6 +63,14 @@ public class Archive {
 
   public void setBuildAttempts(int buildAttempts) {
     this.buildAttempts = buildAttempts;
+  }
+
+  public String getOriginApiKey() {
+    return originApiKey;
+  }
+
+  public void setOriginApiKey(String originApiKey) {
+    this.originApiKey = originApiKey;
   }
 
   /**
@@ -114,6 +122,7 @@ public class Archive {
         ", files=" + files +
         ", buildAttempts=" + buildAttempts +
         ", built=" + built +
+        ", originApiKey=" + originApiKey +
         '}';
   }
 

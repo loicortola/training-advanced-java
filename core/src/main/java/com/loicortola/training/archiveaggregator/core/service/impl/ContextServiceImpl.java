@@ -27,6 +27,8 @@ public class ContextServiceImpl implements ContextService {
 
   @Value("${environment.base.url}")
   private String environmentBaseUrl;
+  
+  private ThreadLocal<String> apiKey = new InheritableThreadLocal<>();
 
   @Override
   public File getResourceDirectory() {
@@ -55,7 +57,15 @@ public class ContextServiceImpl implements ContextService {
         .append(archiveUuid)
         .toString();
   }
-  
-  // step6: implement methods
+
+  @Override
+  public void setRequestApiKey(String apiKey) {
+    this.apiKey.set(apiKey);
+  }
+
+  @Override
+  public String getRequestApiKey() {
+    return apiKey.get();
+  }
 
 }

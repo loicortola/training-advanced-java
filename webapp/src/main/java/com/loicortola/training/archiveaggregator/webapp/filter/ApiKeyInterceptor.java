@@ -3,6 +3,7 @@ package com.loicortola.training.archiveaggregator.webapp.filter;
 import com.loicortola.training.archiveaggregator.common.dao.ApiKeyDAO;
 import com.loicortola.training.archiveaggregator.common.exception.IllegalApiKeyProvidedException;
 import com.loicortola.training.archiveaggregator.common.exception.NoApiKeyProvidedException;
+import com.loicortola.training.archiveaggregator.common.service.ContextService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,8 @@ public class ApiKeyInterceptor implements HandlerInterceptor {
   @Autowired
   ApiKeyDAO apiKeyDAO;
   
-  // step3: add ContextService, set value
+  @Autowired
+  ContextService contextService;
 
   @Override
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -40,6 +42,8 @@ public class ApiKeyInterceptor implements HandlerInterceptor {
       LOGGER.warn("Illegal ApiKey was provided. Abort request.");
       throw new IllegalApiKeyProvidedException();
     }
+    // Set request ApiKey to contextService ThreadLocal
+    contextService.setRequestApiKey(apiKey);
     return true;
   }
 

@@ -115,7 +115,7 @@ public class ArchiveServiceImpl implements ArchiveService {
     // Update build attempts count in DB
     archive.incBuildAttempts();
     archive.setBuilt(false);
-    // step5: set apikey attribute to null here 
+    archive.setOriginApiKey(null); 
     archiveDAO.save(archive);
 
     String archiveUuid = archive.getUuid();
@@ -144,7 +144,7 @@ public class ArchiveServiceImpl implements ArchiveService {
         long delta = System.nanoTime() - startTime;
         LOGGER.debug("Extraction Took: " + delta / 1000000 + " milliseconds");
         createArchive(archiveUuid);
-        // step4: retrieve and set value here
+        archive.setOriginApiKey(contextService.getRequestApiKey());
         archive.setBuilt(true);
         archiveDAO.save(archive);
         LOGGER.debug("processAsync finished successfully");
