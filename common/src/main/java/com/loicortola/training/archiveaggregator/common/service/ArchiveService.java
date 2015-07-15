@@ -11,13 +11,12 @@ import java.io.InputStream;
  */
 public interface ArchiveService {
 
-  // step1: refactor process -> processAsync and change synchronously -> asynchronously
   /**
-   * Process an archive synchronously.
+   * Process an archive asynchronously.
    *
    * @param archive the archive object. See {@link com.loicortola.training.archiveaggregator.common.model.Archive}
    */
-  void process(Archive archive);
+  void processAsync(Archive archive);
 
   /**
    * Get download url from an archive uuid.

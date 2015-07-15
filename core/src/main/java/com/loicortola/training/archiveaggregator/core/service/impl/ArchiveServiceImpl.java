@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Created by Loïc Ortola on 11/07/2015.
@@ -102,15 +103,15 @@ public class ArchiveServiceImpl implements ArchiveService {
   }
 
   @Override
-  public void process(final Archive archive) {
+  public void processAsync(final Archive archive) {
     long startTime = System.nanoTime();
-    LOGGER.debug("In process");
-    
+    LOGGER.debug("In processAsync");
+
     // Add building keys
     synchronized (currentlyBuildingKeys) {
       currentlyBuildingKeys.add(archive.getUuid());
     }
-    
+
     // Update build attempts count in DB
     archive.incBuildAttempts();
     archive.setBuilt(false);
@@ -121,37 +122,56 @@ public class ArchiveServiceImpl implements ArchiveService {
     createArchiveDirectory(archiveUuid);
 
     int archiveCount = archive.getFiles().size();
-    
-    // step2: async1 here: Add CompletableFutures array
-    
-    try {
-      for (int i = 0; i < archiveCount; i++) {
-        String fileName = archive.getFiles().get(i);
-        File f = getFile(archiveUuid, fileName);
-        // step3: async2 here: instead of synchronous extract, do asynchronous (replace line below)
-        extract(archiveUuid, f);
-      }
-      
-      // step4: move try (before loop) here
-      // step5: async3 here: wrap all following block
-      long delta = System.nanoTime() - startTime;
-      LOGGER.debug("Extraction Took: " + delta / 1000000 + " milliseconds");
-      createArchive(archiveUuid);
 
-      archive.setBuilt(true);
-      archiveDAO.save(archive);
-      LOGGER.debug("process finished successfully");
-      LOGGER.debug("Compression Took: " + (System.nanoTime() - startTime - delta) / 1000000 + " milliseconds");
-    } catch (Exception e) {
-      manageProcessingException(e);
-      throw new ProcessingErrorException(e);
-    } finally {
+    CompletableFuture[] futures = new CompletableFuture[archiveCount];
+
+
+    for (int i = 0; i < archiveCount; i++) {
+      String fileName = archive.getFiles().get(i);
+      File f = getFile(archiveUuid, fileName);
+      futures[i] = CompletableFuture.runAsync(() -> {
+        try {
+          extract(archiveUuid, f);
+        } catch (Exception e) {
+          throw new ProcessingErrorException(e);
+        }
+      });
+    }
+
+    CompletableFuture.allOf(futures).thenRunAsync(() -> {
+      try {
+        long delta = System.nanoTime() - startTime;
+        LOGGER.debug("Extraction Took: " + delta / 1000000 + " milliseconds");
+        createArchive(archiveUuid);
+
+        archive.setBuilt(true);
+        archiveDAO.save(archive);
+        LOGGER.debug("processAsync finished successfully");
+        LOGGER.debug("Compression Took: " + (System.nanoTime() - startTime - delta) / 1000000 + " milliseconds");
+      } catch (Exception e) {
+        manageProcessingException(e);
+        throw new ProcessingErrorException(e);
+      }
       cleanArchiveDirectory(archiveUuid);
       synchronized (currentlyBuildingKeys) {
         currentlyBuildingKeys.remove(archive.getUuid());
       }
-    }
-    // step6: async4 here: after async3 block, need to handle exceptions.
+    }).exceptionally((e) -> {
+      LOGGER.warn("One of the CompletableFutures returned exceptionally: " + e.getMessage());
+      // Cancel all running futures
+      for (CompletableFuture f : futures) {
+        if (!f.isDone()) {
+          f.cancel(true);
+        }
+      }
+      // Clear directory
+      synchronized (currentlyBuildingKeys) {
+        currentlyBuildingKeys.remove(archiveUuid);
+      }
+      manageProcessingException((Exception) e);
+      cleanArchiveDirectory(archiveUuid);
+      return null;
+    });
   }
 
   @Override

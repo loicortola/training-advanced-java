@@ -48,7 +48,7 @@ public class ProcessingWebService {
     Assert.notNull(archive);
 
     // Start building, send an email
-    archiveService.process(archive);
+    archiveService.processAsync(archive);
 
     long delta = System.nanoTime() - startTime;
     LOGGER.debug("Took: " + delta / 1000000 + " milliseconds");
